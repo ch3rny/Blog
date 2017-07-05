@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+{% load thumbnail %}
+{% block content %}
+<div class="row">
+    <div class="col s12 m6 l6">
+        <div class="card-panel center-align">
+            {% thumbnail pr_image.profile_image "250x250" crop="center" as im %}
+            <img  class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+           <h6>{{ account.first_name }}</h6> <h6>{{ account.last_name }}</h6>
+        {% if request.user.pk == account.pk%}
+            <i class="material-icons"><a href="{% url 'edit_profile' %}">edit</a></i>
+        {% endif %}
+        </div>
+    </div>
+    <div class="col s12 m6 l6">
+        <div class="card-panel">
+            Місце для якоїсь залупи
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m12 l12">
+        <div class="card-panel">
+            {% for post in posts %}
+             <div><span>{{ post.published_date }}</span><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

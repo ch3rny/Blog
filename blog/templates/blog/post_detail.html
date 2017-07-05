@@ -1,0 +1,76 @@
+ {% extends 'blog/base.html' %} {% block content %}
+{% load thumbnail %}
+<div class="row">
+    <div class="col s12 m3 l3">
+        <ul class="collection hide-on-small-only">
+            {% for category in categorys %}
+            <li><a class="collection-item" href="{% url 'post_list_category' pk=category.pk %}">{{category.category}} ({{ category.numbirs }})</a></li>
+            <li class="divider"></li>
+            {% endfor %}
+        </ul>
+        <a class='dropdown-button btn hide-on-med-and-up deep-purple categorys' href='#' data-activates='dropdown1'>Категории</a>
+
+        <!-- Dropdown Structure -->
+        <ul id='dropdown1' class='dropdown-content'>
+            {% for category in categorys %}
+            <li><a href="{% url 'post_list_category' pk=category.pk %}">{{category.category}} ({{ category.numbirs }})</a></li>
+            <li class="divider"></li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="col s12 m9 l9">
+        <div class="card-panel">
+            <h1>{{ post.title }}</h1>
+            <div>
+
+                <h6 class="left"><i class="fa fa-user-circle-o" aria-hidden="true"></i>:<a href="{% url 'profile' pk=post.author.pk %}"> {{post.author.first_name}} {{ post.author.last_name }}</a>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>:  {{ post.published_date }}</h6>
+                <br>
+            </div>
+            <div class="card-image">
+                <img class="responsive-img" src="{{post.cover.url}}" width="100%">
+            </div>
+            <p>{{ post.text|safe }}</p>
+        </div>
+        <div class="card-panel">
+            {% if user.is_authenticated %}
+            <form method="POST" class="post-form">{% csrf_token %} {{ form.as_p }}
+                <button type="submit" class="save btn btn-default">Оставить комментарий</button>
+            </form>
+            {% else %}
+                <div><h6>Только зарегистрированные пользователи могут оставлять комментарии</h6></div>
+            {% endif %}
+        </div>
+
+        <div class="card-panel">
+            {% if count > 0 %}
+            <h4>Комментарии ({{ count }}):</h4>
+        {% endif %}
+            {% for comment in comments %}
+            <div class="row card-panel">
+                <div class="col s2 m2 l2">
+                    {% load thumbnail %}
+                  {% thumbnail comment.author_avatar.profile_image "128x128" crop="center" as im %}
+                <img class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+                </div>
+                <div class="col s10 m10 l10">
+                    <div class="row">
+                        <h6 class="grey-text text-darken-1 right">{{ comment.created_date }}</h6>
+                        <h6 class="left"><strong>{{ comment.author }} </strong></h6>
+                    </div>
+                    <div class="row">
+                        <h6>{{ comment.text }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <div><h4>Комментариев нет</h4></div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

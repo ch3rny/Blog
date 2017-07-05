@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %} {% block content %}
+<form method="post">
+{% csrf_token %}
+<div class="row">
+    <div class="col s12 m8 offset-m2 l6 offset-l3 card-panel">
+       <div>
+        <h3>Вход</h3>
+    </div>
+    <div class="input-field">
+        <input  type="text" class="validate" required id={{ form.username }}
+        <label for={{ form.username }}Логин</label>
+    </div>
+    <div class="input-field">
+        <input  type="password" class="validate" required id={{ form.password }}
+        <label for={{ form.password }}Пароль</label>
+    </div>
+     <div class="col">
+        <button class="btn waves-effect waves-light s6 m4 l3" type="submit" name="action" value="login">Войти
+  </button>
+     </div>
+    <div class="col">
+   <a href="" class="left valign-wrapper">Забыли пароль или не можете войти?</a>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 offset-m2 l6 offset-l3 center-align"><br><br>
+            Нет профиля? <a href="/register">Тебе сюда</a>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}
