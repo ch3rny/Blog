@@ -27,7 +27,9 @@
                     </ul>
                     <ul id="dropdown2" class="dropdown-content">
                         <li><a href="{%  url 'profile' pk=request.user.pk%}"><i class="material-icons">account_circle</i>Мой аккаунт</a></li>
+                        {% if request.user.is_staff %}
                         <li><a href="/admin"><i class="material-icons">supervisor_account</i>Админка</a></li>
+                        {% endif %}
                         <li><a href="">Шота</a></li>
                         <li><a href="">Сикретна</a></li>
                         <li><a href="{% url 'logout' %}"><i class="material-icons">exit_to_app</i>Выйти</a></li>
