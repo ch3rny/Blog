@@ -30,7 +30,7 @@
                         {% if request.user.is_staff %}
                         <li><a href="/admin"><i class="material-icons">supervisor_account</i>Админка</a></li>
                         {% endif %}
-                        <li><a href="">Шота</a></li>
+                        <li><a href="{% url 'AddPost' %}"><i class="material-icons">note_add</i>Новая статья</a></li>
                         <li><a href="">Сикретна</a></li>
                         <li><a href="{% url 'logout' %}"><i class="material-icons">exit_to_app</i>Выйти</a></li>
                     </ul>
@@ -94,6 +94,9 @@
             alignment: 'right', // Displays dropdown with edge aligned to the left of button
             stopPropagation: false // Stops event propagation
         });
+          $(document).ready(function() {
+                $('select').material_select();
+            });
 
     </script>
 </body>

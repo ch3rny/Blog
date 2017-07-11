@@ -18,7 +18,7 @@ class Category(models.Model):
 class Post(models.Model):
     author = models.ForeignKey('auth.User', verbose_name="Автор")
     title = models.CharField(max_length=200, verbose_name="Название")
-    text = RichTextField(blank=True, default='', verbose_name="Название")
+    text = RichTextField(blank=True, default='', verbose_name="Содержимое")
     cover = models.ImageField(upload_to='articles', default='/article.png', verbose_name="Иллюстрация")
     created_date = models.DateTimeField(
             default=timezone.now, verbose_name="Дата создания")

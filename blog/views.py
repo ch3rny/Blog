@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from .forms import AddComment, EditProfile, EditUserPic
+from .forms import AddComment, EditProfile, EditUserPic, AddPost
 
 
 
@@ -124,3 +124,26 @@ def profile_edit(request):
             'usrform': usrform,
             'picform': picform,
             })
+
+
+def DeletePost(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('post_list')
+
+
+def add_post(request):
+    post = Post()
+    form = AddPost(request.POST)
+    if request.method == "POST":
+        form = AddPost(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.created_date = timezone.now()
+            post.published_date = post.created_date
+            post.save()
+            return redirect('post_list')
+        else:
+            return redirect('profile', pk=request.user.pk)
+    return render(request, 'blog/add_post.html', {'form':form,})

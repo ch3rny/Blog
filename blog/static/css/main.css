@@ -34,3 +34,9 @@
 #dropdown2 {
     width: 200px !important;
 }
+select{
+    display: block;
+}
+#id_category{
+    display: inline-block;
+}

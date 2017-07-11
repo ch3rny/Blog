@@ -30,7 +30,7 @@
                 {% if request.user.is_staff or request.user == post.author %}
                 <h6 class="right">
                     <a href=""><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a></h6>
+                    <a href="{% url 'DeletePost' pk=post.pk%}"><i class="fa fa-trash-o" aria-hidden="true"></i></a></h6>
                 {% endif %}
                 <br>
             </div>
@@ -38,6 +38,12 @@
                 <img class="responsive-img" src="{{post.cover.url}}" width="100%">
             </div>
             <p>{{ post.text|safe }}</p>
+        {% comment %}<div>
+            <hr>
+            <img class="responsive-img circle" src="{{ post.cover.url }}"  width="100px" height="100px" alt="">
+            author <br>{{ post.author.get_full_name }}
+            <hr>
+        </div>{% endcomment %}
         </div>
 
         <div class="card-panel">
