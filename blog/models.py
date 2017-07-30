@@ -20,11 +20,11 @@ class Post(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название")
     text = RichTextField(blank=True, default='', verbose_name="Содержимое")
     cover = models.ImageField(upload_to='articles', default='/article.png', verbose_name="Иллюстрация")
-    created_date = models.DateTimeField(
-            default=timezone.now, verbose_name="Дата создания")
-    published_date = models.DateTimeField(
-            default=timezone.now, verbose_name="Дата публикации")
+    created_date = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
+    published_date = models.DateTimeField(default=timezone.now, verbose_name="Дата публикации")
     category = models.ForeignKey('Category', verbose_name="Рубрика")
+    likes = models.ManyToManyField('UserProfile', verbose_name='Лукасы')
+    watched = models.IntegerField(default=0, verbose_name='Просмотры')
 
     def publish(self):
         self.published_date = timezone.now()

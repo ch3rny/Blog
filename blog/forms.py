@@ -24,7 +24,7 @@ class EditUserPic(forms.ModelForm):
 class AddPost(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'text','category')
+        fields = ('title', 'cover','text','category', )
     #title = forms.CharField()
     #text = RichTextFormField()
     #cat = forms.ModelChoiceField(queryset=Category.objects.all().order_by('category'))

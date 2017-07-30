@@ -1,28 +1,27 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row">
     <div class="card-panel col s12 m8 offset-m2 l6 offset-l3 ">
-    <div class="">
-        <h3>Регистрация</h3>
-    </div>
-    <form method="post">
-        {% csrf_token %}
-        <div class="input-field">
-            <input type="text" class="validate" required id={{ form.username }} <label for={{ form.username }}Имя пользователя:
-            </label>
+        <div class="">
+            <h3>Регистрация</h3>
         </div>
-        <div class="input-field">
-            <input type="password" class="validate" required id={{ form.password1 }} <label for={{ form.password1 }}Пароль:</label>
-        </div>
-        <div class="input-field">
-            <input type="password" class="validate" required id={{ form.password2 }} <label for={{ form.password2 }}Подтверждение пароля:</label>
-        </div>
-        <div class="center-align">
-            <button type="submit" class="btn waves-effect waves-light s6 m4 l3">Зарегистрироваться</button>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-field">
+                <input type="text" class="validate" required id={{ form.username }} <label for={{ form.username }}Имя пользователя: </label>
             </div>
-        </div>
+            <div class="input-field">
+                <input type="password" class="validate" required id={{ form.password1 }} <label for={{ form.password1 }}Пароль:</label>
+            </div>
+            <div class="input-field">
+                <input type="password" class="validate" required id={{ form.password2 }} <label for={{ form.password2 }}Подтверждение пароля:</label>
+            </div>
+            <div class="center-align">
+                <button type="submit" class="btn waves-effect waves-light s6 m4 l3">Зарегистрироваться</button>
+            </div>
+    </div>
     </form>
-    </div>
-    </div>
-    </div>
 </div>
-    {% endblock %}
+</div>
+</div>
+</div>
+{% endblock %}

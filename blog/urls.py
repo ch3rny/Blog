@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^cat/(?P<pk>[0-9]+)/$', views.post_list_category, name='post_list_category'),
     url(r'^edit_profile/$', views.profile_edit, name='edit_profile'),
     url(r'^delpost/(?P<pk>[0-9]+)/$', views.DeletePost, name='DeletePost'),
-    url(r'^add_post/$',views.add_post, name='AddPost')
+    url(r'^add_post/$',views.add_post, name='AddPost'),
+    url(r'^edit_profile/(?P<pk>[0-9]+)/$',views.EditPost, name='EditPost'),
+    url(r'^like/(?P<pk>[0-9]+)/$',views.LikePost, name='LikePost')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

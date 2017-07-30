@@ -4,7 +4,7 @@
 <div class="card-panel">
     <div class="row">
     <div class="col s12 m12 l12 center-align">
-    <form method="POST" class="post-form" enctype="multipart/form-data" action="{% url 'AddPost'%}">
+    <form method="POST" class="post-form" enctype="multipart/form-data" >
     {% csrf_token %}
     {{ form.media }}
     {{ form.as_p}}

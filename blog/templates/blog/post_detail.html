@@ -1,5 +1,5 @@
- {% extends 'blog/base.html' %} {% block content %}
-{% load thumbnail %}
+ {% extends 'blog/base.html' %} {% block content %} {% load thumbnail %}
+<!--Категории-->
 <div class="row">
     <div class="col s12 m3 l3">
         <ul class="collection hide-on-small-only">
@@ -17,60 +17,79 @@
             <li class="divider"></li>
             {% endfor %}
         </ul>
-
     </div>
-
+<!--Статья-->
     <div class="col s12 m9 l9">
         <div class="card-panel">
-            <h1>{{ post.title }}</h1>
-            <div>
-
-                <h6 class="left"><i class="fa fa-user-circle-o" aria-hidden="true"></i>:<a href="{% url 'profile' pk=post.author.pk %}"> {{post.author.first_name}} {{ post.author.last_name }}</a>
-                    <i class="fa fa-calendar" aria-hidden="true"></i>:  {{ post.published_date }}</h6>
-                {% if request.user.is_staff or request.user == post.author %}
+            {% if request.user.is_staff or request.user == post.author %}
                 <h6 class="right">
-                    <a href=""><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href="{% url 'DeletePost' pk=post.pk%}"><i class="fa fa-trash-o" aria-hidden="true"></i></a></h6>
+                    <a href="{% url 'EditPost' pk=post.pk%}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="{% url 'DeletePost' pk=post.pk%}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                </h6>
                 {% endif %}
                 <br>
+            <h1>{{ post.title }}</h1>
+
+            <div>
+            <h6>
+                <a href="{% url 'LikePost' pk=post.pk%}"><i class="material-icons">thumb_up</i></a> {{ likes_count }}
+            </h6>
+            <h6><i class="material-icons">remove_red_eye</i>{{ post.watched }}</h6>
+            <h6><i class="material-icons">chat  </i>{{ comments.count }}</h6>
             </div>
             <div class="card-image">
                 <img class="responsive-img" src="{{post.cover.url}}" width="100%">
             </div>
             <p>{{ post.text|safe }}</p>
-        {% comment %}<div>
+<!--Инфо о статье-->
+            <div>
+                <hr>
+                <div class="row valign-wrapper">
+                    <div class="col s2 m2 l2">
+                        {% thumbnail author.profile_image "128x128" crop="center" as im %}
+                        <img class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"> 
+                        {% endthumbnail %}
+                    </div>
+                    <div class="col s5 m5 l5 left-align">
+                        <h6 class="grey-text text-lighten-1">Автор</h6>
+                        <h6>{{ post.author.get_full_name }}</h6>
+                    </div>
+                    <div class="col s5 m5 l5 right-align">
+                        <h6 class="grey-text text-lighten-1">{{ post.published_date | date:"Y"}}</h6>
+                        <h6>{{ post.published_date | date:"j E" | title}}</h6>
+                    </div>
+                </div>
+            </div>
             <hr>
-            <img class="responsive-img circle" src="{{ post.cover.url }}"  width="100px" height="100px" alt="">
-            author <br>{{ post.author.get_full_name }}
-            <hr>
-        </div>{% endcomment %}
         </div>
-
+<!--Комментарии-->
         <div class="card-panel">
             {% if user.is_authenticated %}
             <form method="POST" class="post-form">{% csrf_token %} {{ form.as_p }}
                 <button type="submit" class="save btn btn-default">Оставить комментарий</button>
             </form>
             {% else %}
-                <div><h6>Только зарегистрированные пользователи могут оставлять комментарии</h6></div>
+            <div>
+                <h6>Только зарегистрированные пользователи могут оставлять комментарии</h6>
+            </div>
             {% endif %}
         </div>
 
         <div class="card-panel">
             {% if count > 0 %}
             <h4>Комментарии ({{ count }}):</h4>
-        {% endif %}
-            {% for comment in comments %}
+            {% endif %} {% for comment in comments %}
             <div class="row card-panel">
                 <div class="col s2 m2 l2">
-                  {% thumbnail comment.author_avatar.profile_image "128x128" crop="center" as im %}
-                <img class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                {% endthumbnail %}
+                    {% thumbnail comment.author_avatar.profile_image "128x128" crop="center" as im %}
+                    <img class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"> {% endthumbnail %}
                 </div>
                 <div class="col s10 m10 l10">
                     <div class="row">
                         <h6 class="grey-text text-darken-1 right">{{ comment.created_date }}</h6>
-                        <a href="{% url 'profile' pk=comment.author.pk%}"><h6 class="left"><strong>{{ comment.author }} </strong></h6></a>
+                        <a href="{% url 'profile' pk=comment.author.pk%}">
+                            <h6 class="left"><strong>{{ comment.author }} </strong></h6>
+                        </a>
                     </div>
                     <div class="row">
                         <h6>{{ comment.text }}</h6>
@@ -78,7 +97,9 @@
                 </div>
             </div>
             {% empty %}
-                <div><h4>Комментариев нет</h4></div>
+            <div>
+                <h4>Комментариев нет</h4>
+            </div>
             {% endfor %}
         </div>
 
