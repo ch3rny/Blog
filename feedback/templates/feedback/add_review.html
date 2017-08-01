@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="card-panel">
+            <div class="row">
+                <div class="col s12 m12 l12 center-align">
+                    <h1>Обратная связь</h1>
+                    <form method="POST" class="post-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <br>
+                        <button type="submit" class="save btn btn-default">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
