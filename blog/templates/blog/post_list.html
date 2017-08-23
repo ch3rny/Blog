@@ -1,45 +1,47 @@
-{% extends 'blog/base.html' %} 
+{% extends 'blog/base.html' %}
 {% block content %}
-<div class="row">
-    <div class="col s12 m3 l3">
-        <ul class="collection hide-on-small-only">
-            {% for category in categorys %}
-            <li><a href="{% url 'post_list_category' pk=category.pk %}" class="collection-item">{{category.category}} ({{ category.numbirs }})</a></li>
-             <li class="divider"></li>
-            {% endfor %}
-        </ul>
-        <a class='dropdown-button btn hide-on-med-and-up deep-purple categorys' href='#' data-activates='dropdown1'>Категории</a>
+    <div class="row">
+        <div class="col s12 m3 l3">
+            <ul class="collection hide-on-small-only">
+                {% for category in categorys %}
+                    <li><a href="{% url 'post_list_category' pk=category.pk %}"
+                           class="collection-item">{{ category.category }} ({{ category.numbirs }})</a></li>
+                    <li class="divider"></li>
+                {% endfor %}
+            </ul>
+            <a class='dropdown-button btn hide-on-med-and-up deep-purple categorys' href='#' data-activates='dropdown1'>Категории</a>
 
-        <!-- Dropdown Structure -->
-        <ul id='dropdown1' class='dropdown-content'>
-            {% for category in categorys %}
-            <li><a href="{% url 'post_list_category' pk=category.pk %}">{{category.category}} ({{ category.numbirs }})</a></li>
-            <li class="divider"></li>
-            {% endfor %}
-        </ul>
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1' class='dropdown-content'>
+                {% for category in categorys %}
+                    <li><a href="{% url 'post_list_category' pk=category.pk %}">{{ category.category }}
+                        ({{ category.numbirs }})</a></li>
+                    <li class="divider"></li>
+                {% endfor %}
+            </ul>
 
-    </div>
-    <div class="col s12 m9 l9">
-        <div class="row">
         </div>
-        {% for post in posts %}
-        <div class="col s12 m6 l6">
-
-            <div class="card hoverable">
-                <div class="card-image">
-                    <a href="{% url 'post_detail' pk=post.pk %}">
-                        <img class="responsive-img" src={{post.cover.url}}>
-                    </a>
-                </div>
-                <div class="card-action">
-                    <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
-                </div>
+        <div class="col s12 m9 l9">
+            <div class="row">
             </div>
+            {% for post in posts %}
+                <div class="col s12 m6 l6">
+
+                    <div class="card hoverable">
+                        <div class="card-image">
+                            <a href="{% url 'post_detail' pk=post.pk %}">
+                                <img class="responsive-img" src={{ post.cover.url }}>
+                            </a>
+                        </div>
+                        <div class="card-action">
+                            <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
 
         </div>
-        {% endfor %}
 
     </div>
-
-</div>
 {% endblock content %}

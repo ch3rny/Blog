@@ -15,7 +15,7 @@ def ReviewCreate(request):
             if 'attachment' in request.FILES:
                 review.attachment = request.FILES['attachment']
             review.save()
-            return redirect('post_list')
+            return redirect('feedback/ty.html')
         else:
             form = AddReview()
     return render(request, 'feedback/add_review.html', {'form': form, })

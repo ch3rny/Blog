@@ -7,44 +7,26 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.forms import UserCreationForm
 from .forms import AddComment, EditProfile, EditUserPic, AddPost
+from django.http import JsonResponse
 
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    categorys = Category.objects.all().order_by('category')
-    for category in categorys:
-        category.numbirs = (len(Post.objects.filter(category=category)))
-    current_user=request.user
-    avatar = 0
-    if request.user.is_authenticated():
-        avatar = UserProfile.objects.get(user=current_user)
-    return render(request, 'blog/post_list.html', {'posts': posts,
-                                                   'categorys':categorys,
-                                                   'current_user':current_user,
-                                                   'avatar':avatar})
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
 
 def post_list_category(request, pk):
-    cat=get_object_or_404(Category,pk=pk)
+    cat = get_object_or_404(Category, pk=pk)
     posts = Post.objects.filter(category=cat).order_by('-published_date')
-    categorys = Category.objects.all().order_by('category')
-    for category in categorys:
-        category.numbirs = (len(Post.objects.filter(category=category)))
-    current_user=request.user
-    avatar = 0
-    if request.user.is_authenticated():
-        avatar = UserProfile.objects.get(user=current_user)
     return render(request, 'blog/post_list.html', {'posts': posts,
-                                                   'categorys':categorys,
-                                                   'current_user':current_user,
-                                                   'avatar':avatar})
+                                                   })
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    categorys = Category.objects.all().order_by('category')
-    author = get_object_or_404(UserProfile, user = post.author)
+    author = get_object_or_404(UserProfile, user=post.author)
     current_user = request.user
+    user = get_object_or_404(UserProfile, user=current_user)
     form = AddComment()
     if request.method == "POST":
         form = AddComment(request.POST)
@@ -59,25 +41,17 @@ def post_detail(request, pk):
             form = AddComment()
     comments = Comment.objects.filter(sourse=post.title)
     count = len(comments)
-    for category in categorys:
-        category.numbirs = (len(Post.objects.filter(category=category)))
-
-    avatar = 0
-    if request.user.is_authenticated():
-        avatar = UserProfile.objects.get(user=current_user)
-
     likes_count = post.likes.count()
-    post.watched+=1
+    post.watched += 1
     post.save()
     return render(request, 'blog/post_detail.html', {'post': post,
-                                                     'categorys':categorys,
-                                                     'current_user':current_user,
-                                                     'avatar':avatar,
+                                                     'current_user': current_user,
                                                      'form': form,
-                                                     'comments':comments,
-                                                     'count':count,
-                                                     'author':author,
-                                                     'likes_count':likes_count
+                                                     'comments': comments,
+                                                     'count': count,
+                                                     'author': author,
+                                                     'likes_count': likes_count,
+                                                     'user':user,
                                                      })
 
 
@@ -107,12 +81,10 @@ def register(request):
 def profile(request, pk):
     account = get_object_or_404(User, pk=pk)
     pr_image = UserProfile.objects.get(user=account)
-    avatar = UserProfile.objects.get(user=request.user)
     posts = Post.objects.filter(author=account).order_by('-published_date')
-    return render(request, 'blog/profile_view.html',{'account':account,
-                                                     'pr_image':pr_image,
-                                                     'avatar':avatar,
-                                                     'posts':posts})
+    return render(request, 'blog/profile_view.html', {'account': account,
+                                                      'pr_image': pr_image,
+                                                      'posts': posts})
 
 
 def profile_edit(request):
@@ -121,9 +93,9 @@ def profile_edit(request):
     if request.method == "POST":
         usrform = EditProfile(request.POST, instance=user)
         picform = EditUserPic(request.FILES, instance=userpic)
-        if usrform.is_valid() and picform.is_valid() :
+        if usrform.is_valid() and picform.is_valid():
             user = usrform.save()
-            userpic =picform.save(commit=False)
+            userpic = picform.save(commit=False)
             userpic.user = user
             if 'profile_image' in request.FILES:
                 userpic.profile_image = request.FILES['profile_image']
@@ -132,16 +104,16 @@ def profile_edit(request):
         else:
             return render_to_response('blog/profile_edit.html', {
                 'usrform': usrform,
-                'picform':picform,
-                },
-                context_instance=RequestContext(request))
+                'picform': picform,
+            },
+                                      context_instance=RequestContext(request))
     else:
         usrform = EditProfile(instance=user)
         picform = EditUserPic(request.FILES)
         return render(request, "blog/profile_edit.html", {
             'usrform': usrform,
             'picform': picform,
-            })
+        })
 
 
 def DeletePost(request, pk):
@@ -166,7 +138,7 @@ def add_post(request):
             return redirect('post_list')
         else:
             return redirect('profile', pk=request.user.pk)
-    return render(request, 'blog/add_post.html', {'form':form,})
+    return render(request, 'blog/add_post.html', {'form': form, })
 
 
 def EditPost(request, pk):
@@ -182,14 +154,21 @@ def EditPost(request, pk):
             return redirect('post_list')
         else:
             return redirect('profile', pk=request.user.pk)
-    return render(request, 'blog/add_post.html', {'form':form,})
+    return render(request, 'blog/add_post.html', {'form': form, })
 
 
-def LikePost(request, pk):
+def LikePost(request):
+    pk = request.GET.get('pk', None)
     post = get_object_or_404(Post, pk=pk)
     user = get_object_or_404(UserProfile, user=request.user)
     if post.likes.filter(user=request.user).exists():
         post.likes.remove(user)
     else:
         post.likes.add(user)
-    return redirect('post_detail', pk=post.pk)
+    likes_count = post.likes.count()
+    data = {'likes_count':likes_count}
+    return JsonResponse(data)
+
+def ajax_test(request):
+    data = {'qqq':timezone.now()}
+    return JsonResponse(data)

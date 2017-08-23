@@ -2,6 +2,5 @@
 __pycache__
 db.sqlite3
 .DS_Store
-MySite/settings.py
 myvenv
 media

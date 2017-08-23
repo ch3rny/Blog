@@ -5,6 +5,6 @@ from . import views
 
 
 urlpatterns = [
-                  url(r'^feedback/$', views.ReviewCreate, name='review'),
+                  url(r'^feedback/$', views.ReviewCreate, name='feedback'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

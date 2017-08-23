@@ -6,6 +6,8 @@
             <img class="circle responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"> {% endthumbnail %}
             <h6>{{ account.first_name }}</h6>
             <h6>{{ account.last_name }}</h6>
+            <h6>{{ account.last_login }}</h6>
+            <h6>{{ account.date_joined }}</h6>
             {% if request.user.pk == account.pk%}
             <i class="material-icons"><a href="{% url 'edit_profile' %}">edit</a></i> {% endif %}
         </div>

@@ -35,12 +35,9 @@ class Post(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User, unique=True)
     profile_image = ImageField(upload_to='avatars',default='avatar.png', verbose_name="Аватар")
 
-    # def get_profile_picture(self):
-    #     if not self.profile_image:
-    #         return ImageField.default
 
     def __str__(self):
         return self.user.first_name+' '+self.user.last_name

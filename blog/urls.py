@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^delpost/(?P<pk>[0-9]+)/$', views.DeletePost, name='DeletePost'),
     url(r'^add_post/$',views.add_post, name='AddPost'),
     url(r'^edit_profile/(?P<pk>[0-9]+)/$',views.EditPost, name='EditPost'),
-    url(r'^like/(?P<pk>[0-9]+)/$',views.LikePost, name='LikePost')
+    url(r'^like/$',views.LikePost, name='LikePost'),
+    url(r'ajax_test/$',views.ajax_test, name='TEST'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
